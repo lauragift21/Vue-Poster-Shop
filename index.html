@@ -6,20 +6,22 @@
     <title>Vue.js Poster Shop</title>
     <link rel="icon" href="public/favicon.ico" type="image/x-icon">
 
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato|Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="public/style.css">
 </head>
 <body>
-<div id="app">
+<div id="app" v-cloak>
     <div class="header">
         <h1>Vue.js Poster Store</h1>
-        <hr>
-        <form class="searchBar"  v-on:submit.prevent ="onSubmit">
+        <form class="searchbar"  v-on:submit.prevent ="onSubmit">
             <input v-model='newSearch' placeholder="Search for Items">
             <input type="submit" value="search" class="btn-search">
         </form>
@@ -28,51 +30,64 @@
         <!-- PRODUCTS SECTION -->
         <div class="products">
             <div v-if="loading">
-                Loading....
+               Loading
+                <i class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
             </div>
             <div class="search-result" v-else>
-                Found {{ items.length }} results for search term {{ lastSearch }}
+                Found {{ results.length }} results for search term {{ lastSearch }}
             </div>
             <br>
-            <div class="products" v-for="(item, index) in items">    
+            <div class="product" v-for="(item, index) in items">    
                    <div>
                        <div class="product-image">
                            <img v-bind:src="item.link"/>
                        </div>
                     </div>
                     <div class="spacer ">
-                        <h4 class="title">{{ item.title }}</h4>
+                        <h4 class="product-title">{{ item.title }}</h4>
                         <p>Price:<strong> {{ price | currency }}</strong></p>
                         <button v-on:click="addItem" class="add-to-cart btn" >Add to Cart</button>       
                     </div>      
             </div>
+                <div id="product-list-bottom">
+                    <div v-if="noMoreItems">No more items.</div>
+                </div>
         </div>
         <!-- CART SECTION -->
         <div class="cart">
-            <h2>Shopping Cart</h2>
-                    <li class="cart-item" v-for="item in cart" v-bind:key="item.id">
-                        <div class="cart-title">Item: {{ items.title }}</div>
-                        <span class="item-qty">{{ item.price | currency}} x {{ item.qty }}</span>  
-                        <button class="btn" v-on:click="inc(item)">+</button>
-                        <button class="btn" v-on:click="dec(item)">-</button>
+                    <h2>Shopping Cart</h2>
+     
+                    <!-- <transition-group name="fade" tag="ul"> -->
+                        <ul>
+                        <li class="cart-item" v-for="item in cart" :key = "item.id">
+                            <div class="item-title">{{items.title}}</div>
+                            <span class="item-qty">{{item.price | currency }} x {{item.qty}}</span>
+                            <button class="btn" v-on:click="inc(item)">+</button>
+                            <button class="btn" v-on:click="dec(item)">-</button>
+                        </li>
+                       </ul> 
+                    <!-- </transition-group> -->
 
-                    </li>    
                     <transition name="fade">
-                    <div class="total" v-if="cart.length">
-                        <div>total: {{ total | currency }}</div>
+                        <div v-if="cart.length">
+                            <div>Total: {{ total | currency }} </div>
+                        </div>
+                    </transition>
+
+                    <div v-if="!cart.length" class="empty-cart">
+                        No items in the cart.
                     </div>
-                </transition>
-            <div v-if="cart.length === 0" class="empty-cart">
-                No items in cart
-            </div> 
-        </div>
+
+                </div>
     </div>
 </div>
 
 <!-- Scripts -->
+<script src="https://use.fontawesome.com/7676b2835e.js"></script>
 <script src="reload/reload.js"></script>
 <script src="node_modules/vue/dist/vue.js"></script>
 <script src="node_modules/vue-resource/dist/vue-resource.js"></script>
+<script src="node_modules/scrollmonitor/scrollMonitor.js"></script>
 <script type="text/javascript" src="public/script.js"></script>
 
 </body>

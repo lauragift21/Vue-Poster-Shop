@@ -61,3 +61,4 @@ See the completed project here: [http://vuejs-poster-shop.vuejsdevelopers.com/](
     ```
 
 5. Your site will be available at *localhost:[PORT]* where `PORT` is whatever value is set in your `.env` file.
+# Vue-Poster-Shop
